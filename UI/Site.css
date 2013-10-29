@@ -7,9 +7,14 @@ body
 
 #main
 {
-	padding: 30px;
+	padding: 50px;
 	background-color: #ffffff;
 	border-radius: 0 0 4px 4px;
+}
+
+hr 
+{
+	border-color: #f7da31;
 }
 
 h1
@@ -19,24 +24,31 @@ h1
 	color: #996600;
 }
 
+img.center
+{
+	display:block;
+	margin-left:auto;
+	margin-right:auto;
+}
+
 ul#loginOptions li
 {
-display: inline;
+	display: inline;
 }
 
 ul#loginOptions li a 
 {
-background-color: #ffffff;
-padding: 10px 20px;
-text-decoration: none;
-line-height: 2.8em;
-color: #034af3;
-border-radius: 4px 4px 0 0;
+	background-color: #ffffff;
+	padding: 10px 20px;
+	text-decoration: none;
+	line-height: 2.8em;
+	color: #034af3;
+	border-radius: 4px 4px 0 0;
 }
 
 ul#loginOptions li a:hover
 {
-background-color: #e8eef4;
+	background-color: #e8eef4;
 }
 
 ul#menu

@@ -14,9 +14,11 @@
 
 <body>
   <div id="main">
-  <h1>Welcome to Bakerzin</h1> 
-  <h2>Bakery and Baking School</h2>
-
+  
+  <img class="center" src="http://www.boga.co.id/images/brands-logo/bakerzin.png" alt="logo" 
+  width="433" height="189">
+  <hr>
+  <h2>Welcome to Bakerzin Bakery and Baking School</h2>
   <p>Enter as:</p>
 
   <ul id="loginOptions">
