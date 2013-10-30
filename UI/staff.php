@@ -15,9 +15,11 @@
 <body>
 	<?php include("headerStaff.php") ?>
   <div id="main">
-  <h1>Bakerzin</h1> 
-  <p>You are logged in as STAFF </p>
-  <p> Do something here </p>
+  <?php include("headerLogo.php") ?>
+
+  <h2> Welcome Dummy User </h2>
+
+
   <?php include("Footer.php") ?>
 </div>
 </body>

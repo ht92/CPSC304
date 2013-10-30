@@ -14,10 +14,8 @@
 
 <body>
   <div id="main">
-  
-  <img class="center" src="http://www.boga.co.id/images/brands-logo/bakerzin.png" alt="logo" 
-  width="433" height="189">
-  <hr>
+  <?php include("headerLogo.php"); ?>
+
   <h2>Welcome to Bakerzin Bakery and Baking School</h2>
   <p>Enter as:</p>
 
@@ -27,7 +25,8 @@
 	<li><a href="login.php">Login</a></li>
   </ul> 
 
-<?php include("Footer.php"); ?>
+  <?php include("Footer.php"); ?>
+
 </div>
 
 </body>

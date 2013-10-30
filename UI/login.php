@@ -7,14 +7,18 @@
 
 <body>
 	<div id="main">
-	<h1>Welcome to Bakerzin</h1> 
-
+	<?php include("headerLogo.php"); ?>
+	
 	<p>Please enter your credentials:</p>
-	<p>username:</p>
-	<p>password:</p>
-<?php 
-	include("Footer.php"); 
-?>
+	<form action="">
+		Username: <input type="text" name="username"><br>
+		Password: <input type="password" name="password"><br>
+		<input type="submit">
+	</form>
+
+	
+
+	<?php include("Footer.php"); ?>
 </div>
 
 </body>
