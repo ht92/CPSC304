@@ -37,7 +37,9 @@ CREATE TABLE Member
 	memberSince DATE NOT NULL,
 	rewardPoints INTEGER NOT NULL,
 	PRIMARY KEY (memberID),
-	FOREIGN KEY (memberID) REFERENCES Customer(customerID));
+	FOREIGN KEY (memberID) REFERENCES Customer(customerID),
+	CONSTRAINT rewardPoints_min
+		CHECK (rewardPoints >= 0));
 
 CREATE TABLE Student
 	(studentID CHAR(8),
@@ -49,7 +51,9 @@ CREATE TABLE Employee
 	(employeeID CHAR(8),
 	salary FLOAT NOT NULL,
 	PRIMARY KEY(employeeID),
-	FOREIGN KEY(employeeID) REFERENCES Users(userID));
+	FOREIGN KEY(employeeID) REFERENCES Users(userID),
+	CONSTRAINT salary_minimum
+		CHECK (salary >= 0));
  
 -- Instructor is-a Employee
 CREATE TABLE Instructor 
@@ -64,14 +68,15 @@ CREATE TABLE Baker
 	PRIMARY KEY (bakerID),
 	FOREIGN KEY (bakerID) REFERENCES Employee(employeeID));
 	
-	
 -- item catalog
 CREATE TABLE Item 
 	(itemID CHAR(5),
 	itemName VARCHAR(15) NOT NULL,
 	itemType VARCHAR(15) NOT NULL,
 	price FLOAT NOT NULL,
-	PRIMARY KEY (itemID));
+	PRIMARY KEY (itemID),
+	CONSTRAINT price_minimum
+		CHECK (price >= 0));
 	
 -- Baker assigned to Bake Items (relation captured here)
 CREATE TABLE BakerTasks
@@ -79,11 +84,13 @@ CREATE TABLE BakerTasks
 	bakerID CHAR(8) NOT NULL,
 	itemID CHAR(5) NOT NULL,
 	itemQuantity INTEGER NOT NULL,
+	dateAssigned DATE NOT NULL,
 	dateCompleted DATE,		
-	pushedToStock VARCHAR(1) NOT NULL,	
 	PRIMARY KEY (taskID),
 	FOREIGN KEY (bakerID) REFERENCES Baker(bakerID),	
-	FOREIGN KEY (itemID) REFERENCES Item(itemID));	
+	FOREIGN KEY (itemID) REFERENCES Item(itemID),
+	CONSTRAINT assigned_completed_constraint
+		CHECK (dateCompleted >= dateAssigned));	
 
 -- to restock, we can simply get all items that have been completed (dateCompleted is not null) and haven`t been pushed (pushedToStock = false)
 -- this will be done on the program (query data, then modify data)
@@ -96,7 +103,9 @@ CREATE TABLE ShippingDetails
 	shippingCost FLOAT NOT NULL,
 	PRIMARY KEY(trackingID),
 	CONSTRAINT date_constraint
-		CHECK (shippingDate <= expectedDeliveryDate));
+		CHECK (shippingDate <= expectedDeliveryDate),
+	CONSTRAINT shippingCost_min
+		CHECK (shippingCost >= 0));
 		
 CREATE TABLE Orders
 	(orderID CHAR(5),
@@ -108,7 +117,9 @@ CREATE TABLE Orders
 	PRIMARY KEY(orderID, itemID),	
 	FOREIGN KEY(customerID) REFERENCES Customer(customerID),
 	FOREIGN KEY(itemID) REFERENCES Item(itemID),
-	FOREIGN KEY(trackingID) REFERENCES ShippingDetails(trackingID));
+	FOREIGN KEY(trackingID) REFERENCES ShippingDetails(trackingID),
+	CONSTRAINT minimum_order_quantity
+		CHECK (itemQuantity > 0));
 	
 CREATE TABLE Supplier 
 	(supplierID CHAR(8), 
@@ -116,7 +127,9 @@ CREATE TABLE Supplier
 	supplyType VARCHAR(20) NOT NULL,
 	supplyCost FLOAT NOT NULL,
 	supplyUnit VARCHAR(5) NOT NULL,	
-	PRIMARY KEY(supplierID, supplyType)); 
+	PRIMARY KEY(supplierID, supplyType),
+	CONSTRAINT supplyCost_min
+		CHECK (supplyCost >= 0)); 
 	
 -- we need supplyType as key because we may purchase multiple types from a supplier
 
@@ -128,7 +141,9 @@ CREATE TABLE BakingClass
 	startDate DATE NOT NULL,
 	endDate DATE NOT NULL,
 	PRIMARY KEY (classID),
-	FOREIGN KEY (instructorID) REFERENCES Instructor(instructorID));
+	FOREIGN KEY (instructorID) REFERENCES Instructor(instructorID),
+	CONSTRAINT start_end_date
+		CHECK (endDate >= startDate));
 	
 CREATE TABLE EnrollsIn 
 	(studentID CHAR(8),
@@ -212,17 +227,18 @@ INSERT INTO Item VALUES ('22222', 'Item2', 'Type2',  2.99);
 INSERT INTO Item VALUES ('33333', 'Item3', 'Type3',  3.99);
 INSERT INTO Item VALUES ('44444', 'Item4', 'Type4',  4.99);
 
-INSERT INTO BakerTasks VALUES ('00000', '05555555', '00000', 10, NULL, 'F');
-INSERT INTO BakerTasks VALUES ('00001', '05555555', '00000', 20, NULL, 'F');
-INSERT INTO BakerTasks VALUES ('00002', '05555555', '00000', 30, NULL, 'F');
-INSERT INTO BakerTasks VALUES ('00003', '05555555', '00000', 40, NULL, 'F');
-INSERT INTO BakerTasks VALUES ('00004', '05555555', '00000', 50, NULL, 'F'); 
+		
+INSERT INTO BakerTasks VALUES ('00000', '05555555', '00000', 10, '11-11-13', NULL);
+INSERT INTO BakerTasks VALUES ('00001', '05555555', '00000', 20, '12-11-13', NULL);
+INSERT INTO BakerTasks VALUES ('00002', '05555555', '00000', 30, '13-11-13', NULL);
+INSERT INTO BakerTasks VALUES ('00003', '05555555', '00000', 40, '14-11-13', NULL);
+INSERT INTO BakerTasks VALUES ('00004', '05555555', '00000', 50, '15-11-13', NULL); 
 
-INSERT INTO BakerTasks VALUES ('00006', '06666666', '11111', 10, '11-11-13', 'T');
-INSERT INTO BakerTasks VALUES ('00007', '06666666', '11111', 20, '12-11-13', 'T');
-INSERT INTO BakerTasks VALUES ('00008', '06666666', '11111', 30, '13-11-13', 'T');
-INSERT INTO BakerTasks VALUES ('00009', '06666666', '11111', 40, '14-11-13', 'T');
-INSERT INTO BakerTasks VALUES ('00010', '06666666', '11111', 50, '15-11-13', 'T'); 
+INSERT INTO BakerTasks VALUES ('00006', '06666666', '11111', 10, '11-11-13', '11-11-13');
+INSERT INTO BakerTasks VALUES ('00007', '06666666', '11111', 20, '12-11-13', '12-11-13');
+INSERT INTO BakerTasks VALUES ('00008', '06666666', '11111', 30, '13-11-13', '13-11-13');
+INSERT INTO BakerTasks VALUES ('00009', '06666666', '11111', 40, '14-11-13', '14-11-13');
+INSERT INTO BakerTasks VALUES ('00010', '06666666', '11111', 50, '15-11-13', '15-11-13'); 
 
 INSERT INTO ShippingDetails VALUES ('00000000', 'Ground', to_date('11/11/2013','mm/dd/yyyy'), to_date('11/12/2013','mm/dd/yyyy'), 5);
 INSERT INTO ShippingDetails VALUES ('00000001', 'Ground', to_date('11/13/2013','mm/dd/yyyy'), to_date('11/14/2013','mm/dd/yyyy'), 6);
@@ -256,11 +272,16 @@ INSERT INTO EnrollsIn VALUES ('55555555', '00001');
 INSERT INTO EnrollsIn VALUES ('66666666', '00002'); 
 INSERT INTO EnrollsIn VALUES ('66666666', '00003'); 
 
-
-
-
-
-
-
+-- check to see if constraints are correct (these should all fail)
+INSERT INTO Users VALUES ('FAILUSER', 'FAIL', 'FAIL', 'FAIL', 'FAIL', 'FAIL', 'FAIL');
+INSERT INTO Employee VALUES('10000000', -100000);
+INSERT INTO Item VALUES ('44444', 'Item4', 'Type4',  -4.99);
+INSERT INTO Member VALUES('44444444', '05-05-05', -1);
+INSERT INTO BakerTasks VALUES ('00011', '06666666', '11111', 50, '15-11-13', '14-11-13'); 
+INSERT INTO Supplier VALUES ('00005', 'Supplier 6', 'Type 6', -5.99, 'lb'); 
+INSERT INTO BakingClass VALUES ('00005', 'Class 6', '01111111', 10, to_date('11/01/2013','mm/dd/yyyy'), to_date('10/30/2013','mm/dd/yyyy'));
+INSERT INTO ShippingDetails VALUES ('00000005', 'Air', to_date('11/16/2013','mm/dd/yyyy'), to_date('11/15/2013','mm/dd/yyyy'), 9);
+INSERT INTO ShippingDetails VALUES ('00000006', 'Air', to_date('11/16/2013','mm/dd/yyyy'), to_date('11/17/2013','mm/dd/yyyy'), -1);
+INSERT INTO Orders VALUES ('00006', to_date('11/16/2013','mm/dd/yyyy'), '55555555', '44444', 0, '00000004'); 
 
 
