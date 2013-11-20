@@ -10,7 +10,7 @@
 	<div id="main">
 	<?php include("headerLogo.php"); ?>
 
-	<h2> Find Order </h2>
+	<!--<h2> Find Order </h2>
 	<table border="0">
   		<tr>
     		<td>Order ID</td>
@@ -22,7 +22,7 @@
   			<td><form action=""><input type="date" name="madeForDate"></form></td>
   			<td><input type="submit" value="submit"></td>
   		</tr>
-	</table>
+	</table>-->
 
 
 	<h2> Incomplete Order </h2>

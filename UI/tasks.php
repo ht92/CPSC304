@@ -10,9 +10,12 @@
 	<div id="main">
 	<?php include("headerLogo.php"); ?>
 
-	<h2> My Schedule </h2>
-	<?php include("staff_schedule_table.php"); ?>
+	<h2> Tasks </h2>
+	<?php include("staff_incompleteOrderTable.php"); ?>
 
+
+	<h2> Classes </h2>
+	<?php include("classTaskTable.php"); ?>
 	<?php include("Footer.php"); ?>
 </div>
 
