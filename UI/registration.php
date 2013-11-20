@@ -19,11 +19,13 @@
 	<h1>Welcome to Bakerzing Baking School!</h1> 
 	<p>Registration form</p>
 	<form action="registration.php" method="post">
-	Name: <input type="string" name="name"><br>
-	Address: <input type="string" name="address"><br>
-	Phone Number:<input type="string" name="phoneNumber"><br>
-	User Name: <input type="string" name="userName"><br>
-	Password: <input type="string" name="password"><br>
+	First Name: <input type="string" name="firstName"><br> <br>
+	Last Name: <input type="string" name="lastName"><br> <br>
+	Address: <input type="string" name="address"><br> <br> 
+	Phone Number:<input type="string" name="phoneNumber"><br> <br>
+	User Name: <input type="string" name="userName"><br> <br>
+	Password: <input type="password" name="password"><br>
+	<p> Password must be between 8-16 characters length </p><br>
 	<input type="submit">
 	</form>
 	<?php include("Footer.php") ?>

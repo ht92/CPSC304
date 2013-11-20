@@ -23,7 +23,10 @@
 	<li><a href="bakingSchool.php">Customer</a></li> 
 	<li><a href="staff.php">Staff</a></li> 
 	<li><a href="login.php">Login</a></li>
-  </ul> 
+  </ul>
+  <h3>At the final version: we will only have login page. 
+    After logging in, user will be brought to the right page (either staff or customer) </h3>
+
 
   <?php include("Footer.php"); ?>
 
