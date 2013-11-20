@@ -25,10 +25,10 @@
 	</table>-->
 
 
-	<h2> Incomplete Order </h2>
+	<h2>Pending Order</h2>
 	<?php include("staff_incompleteOrderTable.php"); ?>
 
-	<h2> Complete Order </h2>
+	<h2>Completed Order</h2>
 	<?php include("staff_completeOrderTable.php"); ?>
 
 

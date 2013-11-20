@@ -11,7 +11,7 @@
 	<?php include("headerLogo.php"); ?>
 
 	<h2> Tasks </h2>
-	<?php include("staff_incompleteOrderTable.php"); ?>
+	<?php include("staff_task_table.php"); ?>
 
 
 	<h2> Classes </h2>

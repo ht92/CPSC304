@@ -29,5 +29,10 @@
   </tr>
 </table>
 
+<br>
+<form name="submit">
+  <input type="submit" value="Add new Class"> 
+</form>
+
 </body>
 </html>
