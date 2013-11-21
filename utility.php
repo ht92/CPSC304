@@ -1,5 +1,3 @@
-<html>
-
 <?php
 
 $dbHandle = OCILogon("ora_v4c8", "a23681117", "ug");
@@ -32,10 +30,14 @@ function executeCommand($cmd)
 
 //$columns contains the name of the columns. It must contain the same amount
 //amount of elements as the number of elements in each row of $tableData
-function printTable($tableData, $columns)
+function printTable($tableData, $columns, $printCheckBox = False)
 {
-   echo "<table>";
+   echo "<table border='1'>";
    echo "<tr>";
+   if($printCheckBox)
+   {
+      echo "<th> </th>";
+   }
    foreach($columns as $column)
    {
       echo "<th>" . $column . "</th>";
@@ -44,6 +46,11 @@ function printTable($tableData, $columns)
    while($row = OCI_Fetch_Array($tableData, OCI_NUM))
    {
       echo "<tr>";
+      if($printCheckBox)
+      {
+         echo "<td><form><input type='checkbox' name='isCompleted'>
+               </form></td>";
+      }
       foreach($row as $rowData)
       {
          echo "<td>" . $rowData . "</td>";
@@ -77,4 +84,3 @@ function runSqlScript()
 
 ?>
 
-</html>

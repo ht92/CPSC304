@@ -26,10 +26,48 @@
 
 
 	<h2>Pending Order</h2>
-	<?php include("staff_incompleteOrderTable.php"); ?>
-
-	<h2>Completed Order</h2>
-	<?php include("staff_completeOrderTable.php"); ?>
+	<?php
+           include "utility.php";
+           if($dbHandle)
+           {
+              $query = "select distinct(orderID), orderDate, customerID
+                        from Orders o
+                        where o.trackingID is null
+                        order by orderID asc";
+              $result =  executeCommand($query);
+              if($status)
+              {
+                 $columns = array("Order ID", "Order Date", "Customer ID");
+ 
+                 printTable($result, $columns, True);
+              }
+              echo "<br><form name='submit'>
+                        <input type='submit' value='Order Shipped'></form>";
+              $result = executeCommand("select distinct(orderID), orderDate,
+                                       customerID,  shippingType, 
+                                       shippingDate, expectedDeliveryDate
+                                       from Orders o, ShippingDetails sd
+                                       where o.trackingID is not null and 
+                                       o.trackingID =  sd.trackingID
+                                       order by orderID asc");
+              if($status)
+              {
+                 echo "<h2>Completed Orders</h2>";
+                 $columns = array("Order ID", "Order Date", "Customer ID",
+                                  "Shipping Type", "Shipping Date",
+                                  "Delivery Date");
+                 printTable($result, $columns);
+              }
+              else
+	      {
+                 echo "<br>Unable to generate table<br>";
+              }
+           }
+           else
+           {
+              echo "<br>Unable to connect to database<br>";
+           } 
+       ?>
 
 
 	<?php include("Footer.php"); ?>

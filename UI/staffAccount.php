@@ -14,16 +14,32 @@
 	<table border="0">
   		<tr>
     		<td>User name</td>
-    		<td><form action=""><input type="text" name="orderID"></form></td>
-    		<td><input type="submit" value="search"></td>
+    		<td><form action="staffAccount.php" method="post"><input type="text"
+                                                  name="userID"></td>
+    		<td><input type="submit" value="search"></td></form>
   		</tr>
 	</table>
 
-
-	<h2> Search Result </h2>
-	<h3> Show search result here, or display no related result found </h3>
-
-
+        <?php
+        include "utility.php";
+        
+        if($dbHandle && isset($_POST['userID']))
+        {
+           $searchValue = $_POST['userID'];
+           $query = "select userID, userName from Users where userName like
+                     '%" . $searchValue . "%'";
+           $result = executeCommand($query);
+           if($status)
+           {
+              $columns = array("User ID", "User Name");
+              echo "<h2>Search Result</h2>";
+              printTable($result, $columns);
+           }
+           OCILogoff($dbHandle);
+        }
+        ?>
+	
+	
 	<?php include("Footer.php"); ?>
 </div>
 
