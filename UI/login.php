@@ -8,15 +8,25 @@
 <body>
 	<div id="main">
 	<?php include("headerLogo.php"); ?>
-	
-	<p>Please enter your credentials:</p>
-	<form action="">
-		Username: <input type="text" name="username"><br>
-		Password: <input type="password" name="password"><br>
+
+	<?php
+
+		session_start();
+		$username= "";
+		$_SESSION['username'] = $username;
+		$_SESSION['password'] = $password;
+		$_SESSION['type'] = $type;
+
+		$type= "staff";
+	?>
+
+	<form method="get" action=<?php echo $type.".php"?>>
+		Username: <input type="text" name="username" value=""> <br>
+		Password: <input type="password" name="password" value=""> <br>
 		<input type="submit">
 	</form>
 
-	
+
 
 	<?php include("Footer.php"); ?>
 </div>
