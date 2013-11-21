@@ -20,7 +20,7 @@
   <p>Enter as:</p>
 
   <ul id="loginOptions">
-	<li><a href="makeorder.php">Customer</a></li> 
+	<li><a href="customer.php">Customer</a></li> 
 	<li><a href="staff.php">Staff</a></li> 
 	<li><a href="login.php">Login</a></li>
   </ul>

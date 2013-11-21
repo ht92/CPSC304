@@ -10,9 +10,15 @@
 	<div id="main">
 	 <?php include("headerLogo.php") ?>
 
+	 <h2> Currently Registerd</h2>
+	<?php include("currentClasses.php"); ?>
+
+	<h2> Past Classes </h2>
+	<?php include("pastClasses.php"); ?>
+	 
+	<h2> Upcoming Classes </h2>
 	<form name="input" action="classes.php" method="get">
 	<table>
-		<th>HEADER </th>
 		<tr>
 		<td> <input type="checkbox" name="CLASSNAME" value="BAKE101" >CLASS NAME QUERIED FROM DATABASE<br> </td>
 		</tr>
