@@ -74,7 +74,7 @@ function runSqlScript()
       }
    }
 }
-runSqlScript();
+
 ?>
 
 </html>
