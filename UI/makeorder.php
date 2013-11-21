@@ -1,4 +1,4 @@
-<!--
+	<!--
 	filename: customer.php
 	created on: Oct 29, 2013
 
@@ -14,18 +14,38 @@
 </head>
 
 <body>
-	<?php include("headerCustomer.php") ?>
+	<?php include("headerCustomer.php"); ?>
 	<div id="main">
-	<h1>Make Order</h1> 
-	<p>Please fill the following</p>
-	<form action="makeorder.php" method="post">
-	Made for date: <input type="date" name="madefordate"><br>
-	Name: <input type="text" name="name"><br>
-	Number of Item <input type="integer" name="quantityordered"><br>
-	<input type="submit">
-	</form>
-	<?php include("Footer.php") ?>
+	 <?php include("headerLogo.php") ?>
+	<h2> ORDER YOUR CAKE :) </h2>
+	<form name="input" action="makeorder.php" method="get">
+	<table border="1">
+		<th>LIST OF CAKES)</th>
+		<th></th>
+
+		<tr>
+		<td> CAKE NAME</td>
+		<td> <input type="checkbox" name="CAKENAME1"><br> </td>
+		</tr>
+
+		<tr>
+		<td> CAKE NAME</td>
+		<td> <input type="checkbox" name="CAKENAME2" value="CAKE"><br> </td>
+		</tr>
+		
+	<table>
+	<tr>
+	<td> Total: </td>
+	<td> $$$$$ show the price here </td>
+	</tr>
+	</table>
+
+	</table>
+	<input type="submit" value="Make Order"><br>
+	</form> 
+	
+<p>STILL DUMMY TABLE, MAKE QUERIES</p>
+<?php include("Footer.php"); ?>
 </div>
 </body>
-
 </html>
