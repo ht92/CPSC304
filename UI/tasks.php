@@ -10,9 +10,11 @@
 	<div id="main">
 	<?php include("headerLogo.php"); ?>
 
-	<h2> Tasks </h2>
+	<h2> In-Progress Tasks </h2>
 	<?php include("staff_task_table.php"); ?>
 
+	<h2> Completed Tasks </h2>
+	<?php include("staff_completed_task_table.php"); ?>
 
 	<h2> Classes </h2>
 	<?php include("classTaskTable.php"); ?>
