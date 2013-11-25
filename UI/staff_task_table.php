@@ -2,42 +2,43 @@
 <html>
 <body>
 
-<table border="1">
-  <tr>
-    <th> </th>
-    <th>Assigned Date</th>
-    <th>Item ID</th>
-    <th>Item Name</th>
-    <th>Quantity</th>
-  </tr>
-  <tr>
-    <td> 
-      <form>
-        <input type="checkbox" name="isCompleted">
-      </form>
-    </td>
-    <td>24/10/2013</td>
-    <td>001</td>
-    <td>Tokyo Banana</td>
-    <td> 500 </td>
-  </tr>
-  <tr>
-    <td> 
-      <form>
-        <input type="checkbox" name="isCompleted">
-      </form>
-    </td>
-    <td>24/10/2013</td>
-    <td>002</td>
-    <td>Paris Banana</td>
-    <td> 500 </td>
-  </tr>
-</table>
+<?php
+if(isset($_POST['isChecked']))
+{
+   $date = date("j-m-y");
+   $completedTasks = $_POST['isChecked'];
+   foreach($completedTasks as $task)
+   { 
+      
+      $update = "update BakerTasks set dateCompleted = '" . $date . "'
+                where taskID = '" . $task . "'";
+      executeCommand($update);
+   } 
+   OCICommit($dbHandle);
+}
+
+
+$taskQuery = "select taskID, bt.itemID, itemName, itemQuantity, dateAssigned
+              from BakerTasks bt, Item i
+              where bt.bakerID = '" . $userID . "' and
+              i.itemID = bt.itemID and bt.dateCompleted is null
+              order by dateAssigned asc";
+
+$result = executeCommand($taskQuery);
+$columns = array("Task ID", "Item ID", "Item Name", "Quantity",
+                 "Date Assigned");
+echo "<form name='submit' method='post' action='tasks.php" . $appendData .
+       "'>";
+printTable($result, $columns, true); 
+
+?>
 
 <br>
-<form name="submit">
-  <input type="submit" value="Mark as Completed"> 
-</form>
+<?php
+echo " <input type='submit' value='Mark as Completed'> 
+</form>";
+
+?>
 
 </body>
 </html>

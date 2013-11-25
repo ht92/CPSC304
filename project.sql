@@ -98,8 +98,8 @@ CREATE TABLE BakerTasks
 CREATE TABLE ShippingDetails 
 	(trackingID CHAR(8),
 	shippingType VARCHAR(15) NOT NULL,
-	shippingDate DATE NOT NULL,
-	expectedDeliveryDate DATE NOT NULL,
+	shippingDate DATE,
+	expectedDeliveryDate DATE,
 	shippingCost FLOAT NOT NULL,
 	PRIMARY KEY(trackingID),
 	CONSTRAINT date_constraint
@@ -114,12 +114,15 @@ CREATE TABLE Orders
 	itemID CHAR(5),
 	itemQuantity INTEGER NOT NULL,
 	trackingID CHAR(8),
+	completed CHAR(1),
 	PRIMARY KEY(orderID, itemID),	
 	FOREIGN KEY(customerID) REFERENCES Customer(customerID),
 	FOREIGN KEY(itemID) REFERENCES Item(itemID),
 	FOREIGN KEY(trackingID) REFERENCES ShippingDetails(trackingID),
 	CONSTRAINT minimum_order_quantity
-		CHECK (itemQuantity > 0));
+		CHECK (itemQuantity > 0),
+	CONSTRAINT completed_status
+		CHECK (completed = 'T' or completed is null));
 	
 CREATE TABLE Supplier 
 	(supplierID CHAR(8), 
@@ -349,26 +352,46 @@ INSERT INTO BakerTasks VALUES ('00019', '00000038', '99999', 90, '20-11-13', '21
 
 -- shipping details for shipped orders (not pending)	
 INSERT INTO ShippingDetails VALUES ('00000000', 'Ground', '11-11-13', '21-11-13', 5);
-INSERT INTO ShippingDetails VALUES ('00000001', 'Air', '12-11-13', '13-11-13', 25);
+INSERT INTO ShippingDetails VALUES ('00000001', 'Ground', '12-11-13', '13-11-13', 5);
 INSERT INTO ShippingDetails VALUES ('00000002', 'Ground', '13-11-13', '23-11-13', 5);
-INSERT INTO ShippingDetails VALUES ('00000003', 'Air', '14-11-13', '15-11-13', 25);
+INSERT INTO ShippingDetails VALUES ('00000003', 'Ground', '14-11-13', '15-11-13', 5);
 INSERT INTO ShippingDetails VALUES ('00000004', 'Ground', '15-11-13', '25-11-13', 5);
-INSERT INTO ShippingDetails VALUES ('00000005', 'Air', '16-11-13', '27-11-13', 25);
+INSERT INTO ShippingDetails VALUES ('00000005', 'Ground', '16-11-13', '27-11-13', 5);
+
+-- shipping details for pending orders
+INSERT INTO ShippingDetails VALUES ('00000006', 'Ground', null, null, 5);
+INSERT INTO ShippingDetails VALUES ('00000007', 'Ground', null, null, 5);
+INSERT INTO ShippingDetails VALUES ('00000008', 'Ground', null, null, 5);
+INSERT INTO ShippingDetails VALUES ('00000009', 'Ground', null, null, 5);
+INSERT INTO ShippingDetails VALUES ('00000010', 'Ground', null, null, 5);
 
 --completed/shipped orders
-INSERT INTO Orders VALUES ('00000', '10-11-13', '00000000', '00000', 1, '00000000');
-INSERT INTO Orders VALUES ('00000', '10-11-13', '00000000', '11111', 2, '00000000');
-INSERT INTO Orders VALUES ('00001', '11-11-13', '11111111', '00000', 3, '00000001');
-INSERT INTO Orders VALUES ('00002', '12-11-13', '22222222', '11111', 4, '00000002');
-INSERT INTO Orders VALUES ('00003', '13-11-13', '33333333', '22222', 5, '00000003'); 
-INSERT INTO Orders VALUES ('00004', '14-11-13', '44444444', '33333', 6, '00000004'); 
-INSERT INTO Orders VALUES ('00005', '15-11-13', '55555555', '44444', 7, '00000005');
---pending orders
-INSERT INTO Orders VALUES ('00006', '16-11-13', '66666666', '55555', 8, null);
-INSERT INTO Orders VALUES ('00007', '17-11-13', '77777777', '66666', 9, null);
-INSERT INTO Orders VALUES ('00008', '18-11-13', '88888888', '77777', 10, null);
-INSERT INTO Orders VALUES ('00009', '19-11-13', '99999999', '88888', 11, null); 
-INSERT INTO Orders VALUES ('00009', '19-11-13', '99999999', '99999', 12, null); 
+INSERT INTO Orders VALUES ('00000', '10-11-13', '00000000', '00000', 1, '00000000', 'T');
+INSERT INTO Orders VALUES ('00000', '10-11-13', '00000000', '11111', 2, '00000000', 'T');
+INSERT INTO Orders VALUES ('00001', '11-11-13', '11111111', '00000', 3, '00000001', 'T');
+INSERT INTO Orders VALUES ('00002', '12-11-13', '22222222', '11111', 4, '00000002', 'T');
+INSERT INTO Orders VALUES ('00003', '13-11-13', '33333333', '22222', 5, '00000003', 'T'); 
+INSERT INTO Orders VALUES ('00004', '14-11-13', '44444444', '33333', 6, '00000004', 'T'); 
+INSERT INTO Orders VALUES ('00005', '15-11-13', '55555555', '44444', 7, '00000005', 'T');
+INSERT INTO Orders VALUES ('00005', '15-11-13', '55555555', '55555', 5, '00000005', 'T');
+--pending pickup orders
+INSERT INTO Orders VALUES ('00006', '16-11-13', '66666666', '55555', 8, null, null);
+INSERT INTO Orders VALUES ('00007', '17-11-13', '77777777', '66666', 9, null, null);
+INSERT INTO Orders VALUES ('00008', '18-11-13', '88888888', '77777', 10, null, null);
+INSERT INTO Orders VALUES ('00009', '19-11-13', '99999999', '88888', 11, null, null); 
+INSERT INTO Orders VALUES ('00009', '19-11-13', '99999999', '99999', 12, null, null);
+--pending shipped orders
+INSERT INTO Orders VALUES ('00015', '16-11-13', '00000000', '55555', 1, '00000006', null);
+INSERT INTO Orders VALUES ('00016', '17-11-13', '11111111', '66666', 2, '00000007', null);
+INSERT INTO Orders VALUES ('00017', '18-11-13', '22222222', '77777', 3, '00000008', null);
+INSERT INTO Orders VALUES ('00018', '19-11-13', '33333333', '88888', 4, '00000009', null); 
+INSERT INTO Orders VALUES ('00019', '20-11-13', '44444444', '99999', 5, '00000010', null);
+--completed/picked up orders 
+INSERT INTO Orders VALUES ('00010', '16-11-13', '66666666', '00000', 8, null, 'T');
+INSERT INTO Orders VALUES ('00011', '17-11-13', '77777777', '11111', 9, null, 'T');
+INSERT INTO Orders VALUES ('00012', '18-11-13', '88888888', '22222', 10, null, 'T');
+INSERT INTO Orders VALUES ('00013', '19-11-13', '99999999', '33333', 11, null, 'T'); 
+INSERT INTO Orders VALUES ('00014', '20-11-13', '99999999', '44444', 12, null, 'T');
 
 --suppliers
 INSERT INTO Supplier VALUES ('00000', 'Supplier 0', 'Type 0', 0.99, 'lb');

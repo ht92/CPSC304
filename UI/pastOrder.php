@@ -2,26 +2,24 @@
 <html>
 <body>
 
-<table border="1">
-  <tr>
-    <th>Order ID</th>
-    <th>Order Date</th>
-    <th>Made for Date</th>
-    <th>Shipping Method</th>
-  </tr>
-  <tr>
-    <td>38902</td>
-    <td>24/10/2013</td>
-    <td>24/10/2013</td>
-    <td>Pick Up </td>
-  </tr>
-  <tr>
-    <td>12345</td>
-    <td>24/10/2013</td>
-    <td>26/10/2013</td>
-    <td>Pick Up</td>
-  </tr>
-</table>
+<?php
+
+$query = "select distinct(orderID), orderDate, shippingDate, shippingType
+          from Orders o, ShippingDetails sd
+          where o.completed is not null and 
+          '" . $userID . "' = o.customerID and
+          o.trackingID = sd.trackingID order by orderID asc";
+
+if($dbHandle)
+{
+   $result = executeCommand($query);
+   $columns = array("Order ID", "Order Date", "Shipping Date",
+                    "Shipping Type");
+   printTable($result, $columns);
+   oci_free_statement($result);
+}
+
+?>
 
 </body>
 </html>

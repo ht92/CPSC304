@@ -4,11 +4,13 @@
 
 	Navigation header for Staff page
 -->
+<?php 
+$appendData = "isMember=" . $isMemberURL . "&userID=" . $userID . "&isStudent=" . $isStudentURL;
+echo "<ul id='menu'>
+<li><a href='customer.php?" . $appendData . "'>Make Order</a></li> 
+<li><a href='classes.php?" . $appendData . "'>Bakerzin Classes</a></li>
+<li><a href='account.php?" . $appendData . "'>Account Information</a></li>
+<li><a href='index.php'>Logout</a></li>
+</ul>";
 
-<ul id="menu">
-
-<li><a href="customer.php">Make Order</a></li> 
-<li><a href="classes.php">Bakerzin Classes</a></li>
-<li><a href="account.php">Account Information</a></li>
-<li><a href="index.php">Logout</a></li>
-</ul> 
+?> 

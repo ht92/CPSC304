@@ -2,35 +2,31 @@
 <html>
 <body>
 
-<table border="1">
-  <tr>
-    <th>CLASS ID</th>
-    <th>COURSE TITLE</th>
-    <th>TYPE</th>
-	<th>FEE</th>
-	<th>START DATE</th>
-	<th>MEETING TIME</th>
-	<th>INSTRUCTOR</th>
-  </tr>
-  <tr>
-    <td>102</td>
-    <td>COOK WHATEVER</td>
-    <td>COOKING</td>
-    <td>$400</td>
-	<td>01/01/2001</td>
-	<td>M W F</td>
-	<td>justin bieber</td>
-  </tr>
-  <tr>
-    <td>102</td>
-    <td>COOK WHATEVER</td>
-    <td>COOKING</td>
-    <td>$400</td>
-	<td>01/01/2001</td>
-	<td>M W F</td>
-	<td>justin bieber</td>
-  </tr>
-</table>
+<?php
 
+$classQuery = "select ei.classID, className, u.fname, u.lname, startDate,
+               endDate from EnrollsIn ei, BakingClass bc, Users u
+               where ei.classID = bc.classID and ei.studentID = '". $userID
+               . "' and bc.instructorID = u.userID";
+$result = executeCommand($classQuery);
+
+?>
+
+<table border="1">
+<th>Class ID</th><th>Class Name</th><th>Instructor</th><th>Start Date</th>
+<th>End Date</th>
+<?php
+while($row = OCI_Fetch_Array($result, OCI_BOTH))
+{
+   if(date("j-m-y", strtotime($row['ENDDATE'])) > date("j-m-y"))
+   {
+   echo "<tr><td>" . $row['CLASSID'] . "</td><td>" . $row['CLASSNAME'] . 
+        "</td><td>" . $row['FNAME'] . " " . $row['LNAME'] . "</td><td>" .
+        $row['STARTDATE'] . "</td><td>" . $row['ENDDATE'] . "</td></tr>";
+   }
+}
+?>
+
+</table>
 </body>
 </html>

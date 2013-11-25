@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<?php include "userInfo.php";
+      include "utility.php" ?>
 <html>
 <head>
   <title>Bakerzin Courses</title>
@@ -17,21 +19,7 @@
 	<?php include("pastClasses.php"); ?>
 	 
 	<h2> Upcoming Classes </h2>
-	<form name="input" action="classes.php" method="get">
-	<table>
-		<tr>
-		<td> <input type="checkbox" name="CLASSNAME" value="BAKE101" >CLASS NAME QUERIED FROM DATABASE<br> </td>
-		</tr>
-
-		<tr>
-		<td> <input type="checkbox" name="CLASSNAME" value="BAKE201">CLASS NAME QUERIED FROM DATABASE<br> </td>
-		</tr>
-	</table>
-	<input type="submit" value="Submit"><br>
-	</form> 
-
-<p>SHOULD RETRIEVE CLASS NAME BY MAKING QUERY </p>
-
+	<?php include "upcomingClasses.php"; ?>
 <?php include("Footer.php"); ?>
 </div>
 

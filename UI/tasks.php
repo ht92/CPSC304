@@ -10,6 +10,7 @@
 	<div id="main">
 	<?php include("headerLogo.php"); ?>
 
+        <?php include "utility.php"; ?>
 	<h2> In-Progress Tasks </h2>
 	<?php include("staff_task_table.php"); ?>
 
