@@ -2,8 +2,17 @@
 <?php include "userInfo.php"; ?>
 <html>
 <head>
-<title>Bakerzin-staff</title>
+<title>Bakerzin-Customer</title>
 <link href="Site.css" rel="stylesheet">
+<script>
+function disableElements()
+{
+document.getElementById("name").disabled=false;
+document.getElementById("address").disabled=false;
+document.getElementById("phone").disabled=false;
+document.getElementById("id").disabled=false;
+}
+</script>
 </head>
 
 <body>
@@ -25,27 +34,28 @@
             $row = OCI_Fetch_Array($result, OCI_BOTH);
             if($row)
             {
-            echo "<tr>Name:</tr><input type='text' name='FullName' size='35'
+            echo "<tr>Name:</tr><input type='text' id='name' name='FullName' size='35'
                    disabled value='" . $row['FNAME'] . " " . $row['LNAME'] 
                    . "'><br>
                  
                    <tr>Address:</tr><input type='text'
-                   name='address' size='35' disabled value='" . 
+                   name='address' id='address' size='35' disabled value='" . 
                    $row['ADDRESS'] . "'><br>
 
                    <tr>Phone Number:</tr>
-                   <input type='text' name='phone' size='35' 
+                   <input type='text' name='phone' size='35' id='phone'
                    disabled value='" . $row['PHONENUMBER'] . "'><br>
 		   
-                   <tr>Customer ID:</tr><input type='text' name='id' 
+                   <tr>Customer ID:</tr><input type='text' name='id' id='id'
                    size='35' disabled value='" . $userID . "'><br>";
             }
             ?>
-			<input type="submit" value="Edit">
+			<input type="submit" value="Submit">
 		</form>
+		<button onclick="disableElements()">Edit Information</button>
 	<?php include("Footer.php") ?>
 	</div>
-	</table>
+
 
 </body>
 </html>
