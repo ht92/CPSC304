@@ -3,15 +3,28 @@
 <body>
 
 <?php
+  
 if(isset($_POST['isChecked']))
 {
+   $removeSelected = false;
+   if(isset($_POST['remove']))
+   {
+      $removeSelected = true;
+   }
    $date = date("j-m-y");
    $completedTasks = $_POST['isChecked'];
    foreach($completedTasks as $task)
    { 
-      
-      $update = "update BakerTasks set dateCompleted = '" . $date . "'
-                where taskID = '" . $task . "'";
+      $update;
+      if($removeSelected)
+      {
+         $update = "delete from BakerTasks where taskID = '" . $task . "'";
+      }
+      else
+      {
+         $update = "update BakerTasks set dateCompleted = '" . $date . "'
+                   where taskID = '" . $task . "'";
+      }
       executeCommand($update);
    } 
    OCICommit($dbHandle);
@@ -35,10 +48,12 @@ printTable($result, $columns, true);
 
 <br>
 <?php
-echo " <input type='submit' value='Mark as Completed'> 
+echo " <input type='submit' name='update' value='Mark as Completed'> 
+       <input type='submit' name='remove' value='Remove Task'>
 </form>";
 
 ?>
 
 </body>
 </html>
+
