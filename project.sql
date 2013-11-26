@@ -27,19 +27,22 @@ CREATE TABLE Users
 CREATE TABLE Customer 
 	(customerID CHAR(8),
 	PRIMARY KEY(customerID),
-	FOREIGN KEY(customerID) REFERENCES Users(userID));
+	FOREIGN KEY(customerID) REFERENCES Users(userID)
+		ON DELETE CASCADE);
 
 CREATE TABLE Student
 	(studentID CHAR(8),
 	PRIMARY KEY (studentID),
-	FOREIGN KEY (studentID) REFERENCES Customer(customerID));
+	FOREIGN KEY (studentID) REFERENCES Customer(customerID)
+		ON DELETE CASCADE);
 
 -- Employee is-a User
 CREATE TABLE Employee 
 	(employeeID CHAR(8),
 	salary FLOAT NOT NULL,
 	PRIMARY KEY(employeeID),
-	FOREIGN KEY(employeeID) REFERENCES Users(userID),
+	FOREIGN KEY(employeeID) REFERENCES Users(userID)
+		ON DELETE CASCADE,
 	CONSTRAINT salary_minimum
 		CHECK (salary >= 0));
  
@@ -47,14 +50,16 @@ CREATE TABLE Employee
 CREATE TABLE Instructor 
 	(instructorID CHAR(8),
 	PRIMARY KEY (instructorID),
-	FOREIGN KEY (instructorID) REFERENCES Employee(employeeID));
+	FOREIGN KEY (instructorID) REFERENCES Employee(employeeID)
+		ON DELETE CASCADE);
 
 -- Baker is-a Employee
 CREATE TABLE Baker 
 	(bakerID CHAR(8),
 	specialization VARCHAR(15) NOT NULL,
 	PRIMARY KEY (bakerID),
-	FOREIGN KEY (bakerID) REFERENCES Employee(employeeID));
+	FOREIGN KEY (bakerID) REFERENCES Employee(employeeID)
+		ON DELETE CASCADE);
 	
 -- item catalog
 CREATE TABLE Item 
@@ -75,8 +80,10 @@ CREATE TABLE BakerTasks
 	dateAssigned DATE NOT NULL,
 	dateCompleted DATE,		
 	PRIMARY KEY (taskID),
-	FOREIGN KEY (bakerID) REFERENCES Baker(bakerID),	
-	FOREIGN KEY (itemID) REFERENCES Item(itemID),
+	FOREIGN KEY (bakerID) REFERENCES Baker(bakerID)
+		ON DELETE CASCADE,	
+	FOREIGN KEY (itemID) REFERENCES Item(itemID)
+		ON DELETE CASCADE,
 	CONSTRAINT assigned_completed_constraint
 		CHECK (dateCompleted >= dateAssigned));	
 
@@ -104,9 +111,12 @@ CREATE TABLE Orders
 	trackingID CHAR(8) NOT NULL,
 	completed CHAR(1),
 	PRIMARY KEY(orderID, itemID),	
-	FOREIGN KEY(customerID) REFERENCES Customer(customerID),
-	FOREIGN KEY(itemID) REFERENCES Item(itemID),
-	FOREIGN KEY(trackingID) REFERENCES ShippingDetails(trackingID),
+	FOREIGN KEY(customerID) REFERENCES Customer(customerID)
+		ON DELETE CASCADE,
+	FOREIGN KEY(itemID) REFERENCES Item(itemID)
+		ON DELETE CASCADE,
+	FOREIGN KEY(trackingID) REFERENCES ShippingDetails(trackingID)
+		ON DELETE CASCADE,
 	CONSTRAINT minimum_order_quantity
 		CHECK (itemQuantity > 0),
 	CONSTRAINT completed_status
@@ -120,7 +130,8 @@ CREATE TABLE BakingClass
 	startDate DATE NOT NULL,
 	endDate DATE NOT NULL,
 	PRIMARY KEY (classID),
-	FOREIGN KEY (instructorID) REFERENCES Instructor(instructorID),
+	FOREIGN KEY (instructorID) REFERENCES Instructor(instructorID)
+		ON DELETE CASCADE,
 	CONSTRAINT start_end_date
 		CHECK (endDate >= startDate));
 	
@@ -128,8 +139,10 @@ CREATE TABLE EnrollsIn
 	(studentID CHAR(8),
 	classID CHAR(5),
 	PRIMARY KEY (studentID, classID),
-	FOREIGN KEY (studentID) REFERENCES Student(studentID),
-	FOREIGN KEY (classID) REFERENCES BakingClass(classID));	
+	FOREIGN KEY (studentID) REFERENCES Student(studentID)
+		ON DELETE CASCADE,
+	FOREIGN KEY (classID) REFERENCES BakingClass(classID)
+		ON DELETE CASCADE);	
 
 -- TODO: Insert sample data
 
