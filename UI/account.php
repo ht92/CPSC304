@@ -7,10 +7,10 @@
 <script>
 function disableElements()
 {
-document.getElementById("name").disabled=false;
+document.getElementById("fname").disabled=false;
+document.getElementById("lname").disabled=false;
 document.getElementById("address").disabled=false;
 document.getElementById("phone").disabled=false;
-document.getElementById("id").disabled=false;
 }
 </script>
 </head>
@@ -34,9 +34,11 @@ document.getElementById("id").disabled=false;
             $row = OCI_Fetch_Array($result, OCI_BOTH);
             if($row)
             {
-            echo "<tr>Name:</tr><input type='text' id='name' name='FullName' size='35'
-                   disabled value='" . $row['FNAME'] . " " . $row['LNAME'] 
-                   . "'><br>
+            echo "<tr>Name:</tr><input type='text' id='fname' name='FirstName' size='35'
+                   disabled value='" . $row['FNAME'] . "'><br>
+				   
+				   <tr>Name:</tr><input type='text' id='lname' name='LastName' size='35'
+                   disabled value='" . $row['LNAME'] . "'><br>
                  
                    <tr>Address:</tr><input type='text'
                    name='address' id='address' size='35' disabled value='" . 
@@ -44,10 +46,7 @@ document.getElementById("id").disabled=false;
 
                    <tr>Phone Number:</tr>
                    <input type='text' name='phone' size='35' id='phone'
-                   disabled value='" . $row['PHONENUMBER'] . "'><br>
-		   
-                   <tr>Customer ID:</tr><input type='text' name='id' id='id'
-                   size='35' disabled value='" . $userID . "'><br>";
+                   disabled value='" . $row['PHONENUMBER'] . "'><br>";
             }
             ?>
 			<input type="submit" value="Submit">
