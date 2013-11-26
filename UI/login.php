@@ -11,8 +11,12 @@
 	<form method="get" action="login.php">
 		Username: <input type="text" name="username" value=""> <br>
 		Password: <input type="password" name="password" value=""> <br>
-		<input type="submit">
+		<input type="submit"><br>
 	</form>
+  <form method="get" action="createNewUser.php">
+    <br>
+    <input type="submit" value="Sign up for an account">
+  </form>
 
         <?php
         include "utility.php";
