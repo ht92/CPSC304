@@ -1,6 +1,5 @@
 drop table Users cascade constraints;
 drop table Customer cascade constraints;
-drop table Member cascade constraints;
 drop table Student cascade constraints;
 drop table Employee cascade constraints;
 drop table Instructor cascade constraints;
@@ -8,7 +7,6 @@ drop table Baker cascade constraints;
 drop table BakerTasks cascade constraints;
 drop table Orders cascade constraints;
 drop table Item cascade constraints;
-drop table Supplier cascade constraints;
 drop table EnrollsIn cascade constraints;
 drop table BakingClass cascade constraints;
 drop table ShippingDetails cascade constraints;
@@ -30,16 +28,6 @@ CREATE TABLE Customer
 	(customerID CHAR(8),
 	PRIMARY KEY(customerID),
 	FOREIGN KEY(customerID) REFERENCES Users(userID));
-
--- Member is-a Customer
-CREATE TABLE Member 
-	(memberID CHAR(8),
-	memberSince DATE NOT NULL,
-	rewardPoints INTEGER NOT NULL,
-	PRIMARY KEY (memberID),
-	FOREIGN KEY (memberID) REFERENCES Customer(customerID),
-	CONSTRAINT rewardPoints_min
-		CHECK (rewardPoints >= 0));
 
 CREATE TABLE Student
 	(studentID CHAR(8),
@@ -113,7 +101,7 @@ CREATE TABLE Orders
 	customerID CHAR(8) NOT NULL,
 	itemID CHAR(5),
 	itemQuantity INTEGER NOT NULL,
-	trackingID CHAR(8),
+	trackingID CHAR(8) NOT NULL,
 	completed CHAR(1),
 	PRIMARY KEY(orderID, itemID),	
 	FOREIGN KEY(customerID) REFERENCES Customer(customerID),
@@ -123,18 +111,6 @@ CREATE TABLE Orders
 		CHECK (itemQuantity > 0),
 	CONSTRAINT completed_status
 		CHECK (completed = 'T' or completed is null));
-	
-CREATE TABLE Supplier 
-	(supplierID CHAR(8), 
-	companyName VARCHAR(20) NOT NULL,
-	supplyType VARCHAR(20) NOT NULL,
-	supplyCost FLOAT NOT NULL,
-	supplyUnit VARCHAR(5) NOT NULL,	
-	PRIMARY KEY(supplierID, supplyType),
-	CONSTRAINT supplyCost_min
-		CHECK (supplyCost >= 0)); 
-	
--- we need supplyType as key because we may purchase multiple types from a supplier
 
 CREATE TABLE BakingClass
 	(classID CHAR(5),
@@ -157,7 +133,7 @@ CREATE TABLE EnrollsIn
 
 -- TODO: Insert sample data
 
--- customer + member users
+-- customers
 INSERT INTO Users VALUES ('00000000', 'ht92', '12345678', 'Henry', 'Tang', 'address', '000 000 0000');
 INSERT INTO Users VALUES ('11111111', 'dleclerc', 'mypassword', 'Dallas', 'Leclerc', 'd address', '111 111 1111');
 INSERT INTO Users VALUES ('22222222', 'testUser2', 'testpassword2', 'Test', '2', 'test address 2', '222 222 2222');
@@ -181,7 +157,7 @@ INSERT INTO Users VALUES ('00000008', '08', 'password8', 'Test', '08', 'test add
 INSERT INTO Users VALUES ('00000009', '09', 'password9', 'Test', '09', 'test address 9', '999 999 9999');
 INSERT INTO Users VALUES ('00000010', '10', 'password10', 'Test', '19', 'test address 10', '101 010 1010');
 
--- plain customer users
+-- customer users
 INSERT INTO Users VALUES ('00000011', '11', 'password1', 'Test', '11', 'test address 1', '111 111 1111');
 INSERT INTO Users VALUES ('00000012', '12', 'password2', 'Test', '12', 'test address 2', '222 222 2222');
 INSERT INTO Users VALUES ('00000013', '13', 'password3', 'Test', '13', 'test address 3', '333 333 3333');
@@ -247,17 +223,6 @@ INSERT INTO Customer VALUES ('00000018');
 INSERT INTO Customer VALUES ('00000019');
 INSERT INTO Customer VALUES ('00000020');
 
-INSERT INTO Member VALUES('00000000', '01-01-01', 0);
-INSERT INTO Member VALUES('11111111', '02-02-02', 1);
-INSERT INTO Member VALUES('22222222', '03-03-03', 2);
-INSERT INTO Member VALUES('33333333', '04-04-04', 3);
-INSERT INTO Member VALUES('44444444', '05-05-05', 4);
-INSERT INTO Member VALUES('55555555', '06-06-06', 5);
-INSERT INTO Member VALUES('66666666', '07-07-07', 6);
-INSERT INTO Member VALUES('77777777', '08-08-08', 7);
-INSERT INTO Member VALUES('88888888', '09-09-09', 8);
-INSERT INTO Member VALUES('99999999', '10-10-10', 9);
-
 INSERT INTO Student VALUES('00000001');
 INSERT INTO Student VALUES('00000002');
 INSERT INTO Student VALUES('00000003');
@@ -321,11 +286,21 @@ INSERT INTO Item VALUES ('11111', 'Item1', 'Type1',  1.99);
 INSERT INTO Item VALUES ('22222', 'Item2', 'Type2',  2.99);
 INSERT INTO Item VALUES ('33333', 'Item3', 'Type3',  3.99);
 INSERT INTO Item VALUES ('44444', 'Item4', 'Type4',  4.99);
-INSERT INTO Item VALUES ('55555', 'Item0', 'Type0',  5.99);
-INSERT INTO Item VALUES ('66666', 'Item1', 'Type1',  6.99);
-INSERT INTO Item VALUES ('77777', 'Item2', 'Type2',  7.99);
-INSERT INTO Item VALUES ('88888', 'Item3', 'Type3',  8.99);
-INSERT INTO Item VALUES ('99999', 'Item4', 'Type4',  9.99);
+INSERT INTO Item VALUES ('55555', 'Item5', 'Type0',  5.99);
+INSERT INTO Item VALUES ('66666', 'Item6', 'Type1',  6.99);
+INSERT INTO Item VALUES ('77777', 'Item7', 'Type2',  7.99);
+INSERT INTO Item VALUES ('88888', 'Item8', 'Type3',  8.99);
+INSERT INTO Item VALUES ('99999', 'Item9', 'Type4',  9.99);
+INSERT INTO Item VALUES ('00001', 'bread1', 'Bread',  0.99);
+INSERT INTO Item VALUES ('00002', 'bread2', 'Bread',  1.99);
+INSERT INTO Item VALUES ('00003', 'bread3', 'Bread',  2.99);
+INSERT INTO Item VALUES ('00004', 'bread4', 'Bread',  3.99);
+INSERT INTO Item VALUES ('00005', 'cake1', 'Cake',  4.99);
+INSERT INTO Item VALUES ('00006', 'cake2', 'Cake',  5.99);
+INSERT INTO Item VALUES ('00007', 'cake3', 'Cake',  6.99);
+INSERT INTO Item VALUES ('00008', 'cake4', 'Cake',  7.99);
+INSERT INTO Item VALUES ('00009', 'pie1', 'Pie',  8.99);
+INSERT INTO Item VALUES ('00010', 'pie2', 'Pie',  9.99);
 
 -- tasks in progress
 INSERT INTO BakerTasks VALUES ('00000', '00000029', '00000', 1, '11-11-13', NULL);
@@ -359,11 +334,25 @@ INSERT INTO ShippingDetails VALUES ('00000004', 'Ground', '15-11-13', '25-11-13'
 INSERT INTO ShippingDetails VALUES ('00000005', 'Ground', '16-11-13', '27-11-13', 5);
 
 -- shipping details for pending orders
-INSERT INTO ShippingDetails VALUES ('00000006', 'Ground', null, null, 5);
-INSERT INTO ShippingDetails VALUES ('00000007', 'Ground', null, null, 5);
-INSERT INTO ShippingDetails VALUES ('00000008', 'Ground', null, null, 5);
-INSERT INTO ShippingDetails VALUES ('00000009', 'Ground', null, null, 5);
-INSERT INTO ShippingDetails VALUES ('00000010', 'Ground', null, null, 5);
+INSERT INTO ShippingDetails VALUES ('00000011', 'Ground', null, null, 5);
+INSERT INTO ShippingDetails VALUES ('00000012', 'Ground', null, null, 5);
+INSERT INTO ShippingDetails VALUES ('00000013', 'Ground', null, null, 5);
+INSERT INTO ShippingDetails VALUES ('00000014', 'Ground', null, null, 5);
+INSERT INTO ShippingDetails VALUES ('00000015', 'Ground', null, null, 5);
+
+-- shipping details for pending pickup orders
+INSERT INTO ShippingDetails VALUES ('00000006', 'Pickup', null, null, 0);
+INSERT INTO ShippingDetails VALUES ('00000007', 'Pickup', null, null, 0);
+INSERT INTO ShippingDetails VALUES ('00000008', 'Pickup', null, null, 0);
+INSERT INTO ShippingDetails VALUES ('00000009', 'Pickup', null, null, 0);
+INSERT INTO ShippingDetails VALUES ('00000010', 'Pickup', null, null, 0);
+
+-- shipping details for completed pickup orders
+INSERT INTO ShippingDetails VALUES ('00000016', 'Pickup', '17-11-13', '19-11-13', 0);
+INSERT INTO ShippingDetails VALUES ('00000017', 'Pickup', '18-11-13', '20-11-13', 0);
+INSERT INTO ShippingDetails VALUES ('00000018', 'Pickup', '19-11-13', '21-11-13', 0);
+INSERT INTO ShippingDetails VALUES ('00000019', 'Pickup', '20-11-13', '22-11-13', 0);
+INSERT INTO ShippingDetails VALUES ('00000020', 'Pickup', '21-11-13', '23-11-13', 0);
 
 --completed/shipped orders
 INSERT INTO Orders VALUES ('00000', '10-11-13', '00000000', '00000', 1, '00000000', 'T');
@@ -375,35 +364,23 @@ INSERT INTO Orders VALUES ('00004', '14-11-13', '44444444', '33333', 6, '0000000
 INSERT INTO Orders VALUES ('00005', '15-11-13', '55555555', '44444', 7, '00000005', 'T');
 INSERT INTO Orders VALUES ('00005', '15-11-13', '55555555', '55555', 5, '00000005', 'T');
 --pending pickup orders
-INSERT INTO Orders VALUES ('00006', '16-11-13', '66666666', '55555', 8, null, null);
-INSERT INTO Orders VALUES ('00007', '17-11-13', '77777777', '66666', 9, null, null);
-INSERT INTO Orders VALUES ('00008', '18-11-13', '88888888', '77777', 10, null, null);
-INSERT INTO Orders VALUES ('00009', '19-11-13', '99999999', '88888', 11, null, null); 
-INSERT INTO Orders VALUES ('00009', '19-11-13', '99999999', '99999', 12, null, null);
+INSERT INTO Orders VALUES ('00006', '16-11-13', '66666666', '55555', 8, '00000006', null);
+INSERT INTO Orders VALUES ('00007', '17-11-13', '77777777', '66666', 9, '00000007', null);
+INSERT INTO Orders VALUES ('00008', '18-11-13', '88888888', '77777', 10, '00000008', null);
+INSERT INTO Orders VALUES ('00009', '19-11-13', '99999999', '88888', 11, '00000009', null); 
+INSERT INTO Orders VALUES ('00009', '19-11-13', '99999999', '99999', 12, '00000010', null);
 --pending shipped orders
-INSERT INTO Orders VALUES ('00015', '16-11-13', '00000000', '55555', 1, '00000006', null);
-INSERT INTO Orders VALUES ('00016', '17-11-13', '11111111', '66666', 2, '00000007', null);
-INSERT INTO Orders VALUES ('00017', '18-11-13', '22222222', '77777', 3, '00000008', null);
-INSERT INTO Orders VALUES ('00018', '19-11-13', '33333333', '88888', 4, '00000009', null); 
-INSERT INTO Orders VALUES ('00019', '20-11-13', '44444444', '99999', 5, '00000010', null);
+INSERT INTO Orders VALUES ('00015', '16-11-13', '00000000', '55555', 1, '00000011', null);
+INSERT INTO Orders VALUES ('00016', '17-11-13', '11111111', '66666', 2, '00000012', null);
+INSERT INTO Orders VALUES ('00017', '18-11-13', '22222222', '77777', 3, '00000013', null);
+INSERT INTO Orders VALUES ('00018', '19-11-13', '33333333', '88888', 4, '00000014', null); 
+INSERT INTO Orders VALUES ('00019', '20-11-13', '44444444', '99999', 5, '00000015', null);
 --completed/picked up orders 
-INSERT INTO Orders VALUES ('00010', '16-11-13', '66666666', '00000', 8, null, 'T');
-INSERT INTO Orders VALUES ('00011', '17-11-13', '77777777', '11111', 9, null, 'T');
-INSERT INTO Orders VALUES ('00012', '18-11-13', '88888888', '22222', 10, null, 'T');
-INSERT INTO Orders VALUES ('00013', '19-11-13', '99999999', '33333', 11, null, 'T'); 
-INSERT INTO Orders VALUES ('00014', '20-11-13', '99999999', '44444', 12, null, 'T');
-
---suppliers
-INSERT INTO Supplier VALUES ('00000', 'Supplier 0', 'Type 0', 0.99, 'lb');
-INSERT INTO Supplier VALUES ('00001', 'Supplier 1', 'Type 1', 1.99, 'kg');
-INSERT INTO Supplier VALUES ('00002', 'Supplier 2', 'Type 2', 2.99, 'g');
-INSERT INTO Supplier VALUES ('00003', 'Supplier 3', 'Type 3', 3.99, 'kg');
-INSERT INTO Supplier VALUES ('00004', 'Supplier 4', 'Type 4', 4.99, 'lb'); 
-INSERT INTO Supplier VALUES ('00005', 'Supplier 5', 'Type 5', 5.99, 'lb');
-INSERT INTO Supplier VALUES ('00006', 'Supplier 6', 'Type 6', 6.99, 'kg');
-INSERT INTO Supplier VALUES ('00007', 'Supplier 7', 'Type 7', 7.99, 'g');
-INSERT INTO Supplier VALUES ('00008', 'Supplier 8', 'Type 8', 8.99, 'kg');
-INSERT INTO Supplier VALUES ('00009', 'Supplier 9', 'Type 9', 9.99, 'lb'); 
+INSERT INTO Orders VALUES ('00010', '16-11-13', '66666666', '00000', 8, '00000016', 'T');
+INSERT INTO Orders VALUES ('00011', '17-11-13', '77777777', '11111', 9, '00000017', 'T');
+INSERT INTO Orders VALUES ('00012', '18-11-13', '88888888', '22222', 10, '00000018', 'T');
+INSERT INTO Orders VALUES ('00013', '19-11-13', '99999999', '33333', 11, '00000019', 'T'); 
+INSERT INTO Orders VALUES ('00014', '20-11-13', '99999999', '44444', 12, '00000020', 'T');
 
 --baking classes offered now
 INSERT INTO BakingClass VALUES ('00001', 'Class 1', '00000021', 10, '01-11-13', '30-11-13');
@@ -468,12 +445,9 @@ INSERT INTO EnrollsIn VALUES ('00000010', '00019');
 -- INSERT INTO Users VALUES ('FAILUSER', 'FAIL', 'FAIL', 'FAIL', 'FAIL', 'FAIL', 'FAIL');
 --INSERT INTO Employee VALUES('10000000', -100000);
 --INSERT INTO Item VALUES ('44444', 'Item4', 'Type4',  -4.99);
---INSERT INTO Member VALUES('44444444', '05-05-05', -1);
 --INSERT INTO BakerTasks VALUES ('00011', '06666666', '11111', 50, '15-11-13', '14-11-13'); 
---INSERT INTO Supplier VALUES ('00005', 'Supplier 6', 'Type 6', -5.99, 'lb'); 
 --INSERT INTO BakingClass VALUES ('00005', 'Class 6', '01111111', 10, to_date('11/01/2013','mm/dd/yyyy'), to_date('10/30/2013','mm/dd/yyyy'));
 --INSERT INTO ShippingDetails VALUES ('00000005', 'Air', to_date('11/16/2013','mm/dd/yyyy'), to_date('11/15/2013','mm/dd/yyyy'), 9);
 --INSERT INTO ShippingDetails VALUES ('00000006', 'Air', to_date('11/16/2013','mm/dd/yyyy'), to_date('11/17/2013','mm/dd/yyyy'), -1);
 --INSERT INTO Orders VALUES ('00006', to_date('11/16/2013','mm/dd/yyyy'), '55555555', '44444', 0, '00000004'); 
-
 
