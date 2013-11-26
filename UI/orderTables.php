@@ -32,7 +32,7 @@
               }
               $query = "select distinct(orderID), orderDate, customerID
                         from Orders o
-                        where o.trackingID is null and
+                        where
                         o.completed is null
                         order by orderID asc";
               $result =  executeCommand($query);
@@ -45,8 +45,14 @@
 				echo "<form name='Pending Orders' method='post'
                 action='order.php" . $appendData . "'>";
 				
-				
-                 printTable($result, $columns, True);
+		 if(!$dashboard)
+                 {		
+                    printTable($result, $columns, True);
+                 }
+                 else
+                 {
+                    printTable($result, $columns);
+                 }
 				 
 				 if (!$dashboard) {
 					echo "<input type='submit' value='Order Shipped'></form>";

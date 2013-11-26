@@ -39,7 +39,14 @@ if($dbHandle)
 
  echo "<form name='removeOrder' method='post' action='customer.php?" . 
        $appendData . "'>";
-  printTable($result, $columns, true);
+  if(!$dashboard)
+  {
+     printTable($result, $columns, true);
+  }
+  else
+  {
+     printTable($result, $columns);
+  }
   oci_free_statement($result);
   echo "<input type='submit' name='remove' value='Remove Selected'>
         </form>";
