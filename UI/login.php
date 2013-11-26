@@ -7,7 +7,12 @@
 
 <body>
 	<div id="main">
-        <?php include("headerLogo.php"); ?>
+        <?php include("headerLogo.php");
+          if(isset($_GET['loginFailed']))
+          {
+             echo "<br>Invalid Username or Password<br>";
+          } 
+          ?>
 	<form method="get" action="login.php">
 		Username: <input type="text" name="username" value=""> <br>
 		Password: <input type="password" name="password" value=""> <br>
@@ -20,7 +25,11 @@
 
         <?php
         include "utility.php";
-       
+        if(isset($_GET['accountCreated']))
+        {
+           echo "<br>Account Created Successfully<br>";
+        } 
+        
         if($dbHandle && isset($_GET['username']) && 
            isset($_GET['password']))
         {
@@ -62,8 +71,10 @@
                     $isInstructor = "true";
                  }
                  oci_free_statement($result);
-                 
-                header("Location: https://www.ugrad.cs.ubc.ca/~v4c8/staff.php?isBaker=" . $isBaker . "&isInstructor=" . $isInstructor . "&userID=" . $userID);
+                $locationString = "Location: staff.php?isBaker=" . $isBaker
+                                  . "&isInstructor=" . $isInstructor . 
+                                  "&userID=" . $userID; 
+                header($locationString);
               }
               else
               {   
@@ -85,14 +96,14 @@
                   {
                      $isStudent = "true";
                   }
-                  header("Location: https://www.ugrad.cs.ubc.ca/~v4c8/customer.php?isMember=" . $isMember . "&userID=" . $userID . "&isStudent=" . $isStudent);
+                  header("Location: customer.php?isMember=" . $isMember . "&userID=" . $userID . "&isStudent=" . $isStudent);
               }
            }
            else
            {
               echo "<br>Login Failed<br>";
               oci_free_statement($result);
-              header("Location: login.php");
+              header("Location: login.php?loginFailed=true");
            }
         }
         ?>
