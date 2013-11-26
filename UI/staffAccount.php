@@ -9,77 +9,81 @@
 	<?php include("headerStaff.php"); ?>
 	<div id="main">
 	<?php include("headerLogo.php"); ?>
-        
-       
-        <h2>Order Statistics</h2>
-        <?php
-         include "utility.php";
-         $aggregateOption = $_POST['stat'];
-         $aggQuery = "select " . $aggregateOption . "(temp.numorders)
-                       from (select c.customerID, count(distinct orderID)
-                             as numorders
-                             from customer c, orders o
-                             where c.customerID = o.customerID
-                             group by c.customerID) temp";
-           $result = executeCommand($aggQuery);
-           $row =  OCI_Fetch_Array($result, OCI_NUM);
-           $options = array("avg", "sum", "min", "max");
-           $optionValues = array("avg" => "Average",
-                                 "sum" => "Total",
-                                 "min" => "Minimum",
-                                 "max" => "Maximum");  
-         echo "<table>
-                  <tr><td>
-                     <form name='statistics' method='post'
-                      action='staffAccount.php" . $appendData . "'>
-                        <select name='stat'>";
-                        foreach($options as $option)
-                        {
-                           echo "<option value='" . $option . "'";
-                           if(strcmp($option, $aggregateOption) == 0)
-                           {
-                              echo " selected";
-                           }
-                           echo ">" . $optionValues[$option] . "</option>";
-                        }
-         echo   "</td><td>Number of Orders: " . $row[0] . "</td></tr>
-                 </table>
-                 <input type='submit' name='update' value='Update'>";
-                
-                                        
-        ?>
-        <br><br>  
+
 	<h2> Find Customer </h2>
-        
 	<table border="0">
   		<tr>
     		<td>User name</td>
                 <?php
-    		echo "<td><input type='text' name='userID'></td>";
+    		echo "<td><form action='staffAccount.php" . $appendData . 
+                     "' method='post'><input type='text' name='userID'></td>
+                     ";
                 ?>
-    		<td><input type="submit" name='search' value="search"></td></form>
+    		<td><input type="submit" value="search"></td></form>
   		</tr>
 	</table>
-
+		
         <?php
+        include "utility.php";
         
-        if($dbHandle && isset($_POST['search']))
+		function printHyperlinkTable($tableData, $columns, $printCheckBox = False)
+		{
+			$userID = $_GET['userID'];
+			echo "<table border='1'>";
+			echo "<tr>";
+			if($printCheckBox)
+			{
+					echo "<th> </th>";
+			}
+			foreach($columns as $column)
+			{
+				echo "<th>" . $column . "</th>";
+			}
+			echo "</tr>";
+			while($row = OCI_Fetch_Array($tableData, OCI_NUM))
+			{
+				echo "<tr>";
+				if($printCheckBox)
+				{
+					echo "<td><form><input type='checkbox' name='isCompleted'>
+					</form></td>";
+				}
+				$isID = true;
+				foreach($row as $rowData)
+				{
+					if ($isID) {
+						echo "<td> <a href=\"customerInfo.php?userID=$userID&customerID=$rowData\">" . $rowData . "</a></td>";
+						$isID = false;
+					}
+					else {
+						echo "<td>" . $rowData . "</td>";
+						$isID = true;
+					}
+					
+				}
+				echo "</tr>";
+			}
+			echo "</table>";
+		}
+		
+		
+        if($dbHandle && isset($_POST['userID']))
         {
            $searchValue = $_POST['userID'];
-           $query = "select customerID, userName from Users u, customer c
-                     where u.userName like
-                     '%" . $searchValue . "%' and c.customerID = u.userID";
+           $query = "select userID, userName from Users where userName like
+                     '%" . $searchValue . "%'";
            $result = executeCommand($query);
            if($status)
            {
               $columns = array("User ID", "User Name");
               echo "<h2>Search Result</h2>";
-              printTable($result, $columns);
+              printHyperlinkTable($result, $columns);
            }
-           
+           OCILogoff($dbHandle);
         }
         ?>
 		
+	
 	<?php include("Footer.php"); ?>
 </div>
 

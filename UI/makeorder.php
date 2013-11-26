@@ -38,7 +38,7 @@
         $itemQuery = "select * from item order by itemId asc";
         $result = executeCommand($itemQuery);
         
-        echo "<form name='Make Order' method='post' action='makeorder.php?submit=yes'>
+        echo "<br><form name='Make Order' method='post' action='makeorder.php?submit=yes'>
               <table border = '1'><th>Item Id</th><th>Item Name</th><th>Item Type</th>
               <th>Price</th><th>Amount</th>";
         

@@ -18,7 +18,7 @@ $result = executeCommand($classQuery);
 <?php
 while($row = OCI_Fetch_Array($result, OCI_BOTH))
 {
-   if(date("j-m-y", strtotime($row['ENDDATE'])) > date("j-m-y"))
+   if(date("j-m-y", strtotime($row['ENDDATE'])) > date("y-m-j"))
    {
    echo "<tr><td>" . $row['CLASSID'] . "</td><td>" . $row['CLASSNAME'] . 
         "</td><td>" . $row['FNAME'] . " " . $row['LNAME'] . "</td><td>" .
