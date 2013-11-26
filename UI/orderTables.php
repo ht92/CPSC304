@@ -32,7 +32,7 @@
               }
               $query = "select distinct(orderID), orderDate, customerID
                         from Orders o
-                        where o.trackingID is null and
+                        where
                         o.completed is null
                         order by orderID asc";
               $result =  executeCommand($query);
