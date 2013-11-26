@@ -9,7 +9,9 @@
 <?php include("headerStaff.php"); ?>
 	<div id="main">
 	<?php include("headerLogo.php"); ?>
-	<form method="get" action="item.php">
+	<?php include "utility.php"; ?>
+	
+	<h2> Item </h2>
 	<table border="1">
 	<tr>
 		<th>Item ID</th>
@@ -31,7 +33,13 @@
 	</tr>
 	</table>
 	
-	<input type="submit" value="Add">
+	<?php 
+	echo "<form method='get' action='addItem.php" . $appendData ."'>
+	<input type='submit' value='Add Item'>
+	</form>";
+	?>
+	
+	<form>
 	<input type="submit" value="Delete">
 	</form>
 	
