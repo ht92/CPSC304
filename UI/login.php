@@ -18,9 +18,24 @@
 		Password: <input type="password" name="password" value=""> <br>
 		<input type="submit"><br>
 	</form>
-  <form method="get" action="createNewUser.php">
+  <form method="get" action="createNewCustomer.php">
     <br>
-    <input type="submit" value="Sign up for an account">
+    <input type="submit" value="Sign up for Customer">
+  </form>
+  
+  <form method="get" action="createNewBaker.php">
+    <br>
+    <input type="submit" value="Sign up for Baker">
+  </form>
+  
+  <form method="get" action="createNewInstructor.php">
+    <br>
+    <input type="submit" value="Sign up for Instructor">
+  </form>
+  
+  <form method="get" action="createNewBakerAndInstructor.php">
+    <br>
+    <input type="submit" value="Sign up for both Instructor and Baker">
   </form>
 
         <?php
