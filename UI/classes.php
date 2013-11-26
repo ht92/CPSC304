@@ -13,10 +13,8 @@
 	<div id="main">
 	 <?php include("headerLogo.php") ?>
 
-	<?php 
-		$isStudent = $_GET['isStudent'];
-		
-		if ($isStudent == "true") {
+	<?php 	
+		if ($isStudent) {
 			echo "<h2> Currently Registered </h2>";
 			include("currentClasses.php");
 			
