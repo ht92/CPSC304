@@ -42,15 +42,24 @@ $columns = array("Task ID", "Item ID", "Item Name", "Quantity",
                  "Date Assigned");
 echo "<form name='submit' method='post' action='tasks.php" . $appendData .
        "'>";
-printTable($result, $columns, true); 
-
+if($dashboard)
+{
+printTable($result, $columns);
+} 
+else
+{
+printTable($result, $columns, true);
+}
 ?>
 
 <br>
 <?php
+if(!$dashboard)
+{
 echo " <input type='submit' name='update' value='Mark as Completed'> 
        <input type='submit' name='remove' value='Remove Task'>
 </form>";
+}
 
 ?>
 

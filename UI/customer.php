@@ -93,7 +93,7 @@
                  </td></tr>";
         }
         echo "<tr><select name='deliveryOption'><option value='pickup'>Pickup</option>
-              <option value='DHL'>DHL</option></tr>";
+              <option value='Ground'>Ground</option></tr>";
         echo "</table>
               <input type='submit' value='Make Order'></form>";
 
@@ -110,8 +110,16 @@
             foreach($orderCommand as $order)
             {
                oci_free_statement(executeCommand($order));
+               if(!$status)
+               {
+                  echo "<br>Error Creating Order<br";
+                  break;
+               }
             }
-            OCICommit($dbHandle);
+            if($status)
+            {
+               OCICommit($dbHandle);
+             }
             /*
             $taskQuery = "select count(*) as numOrders, bakerID
                           from BakerTasks
@@ -134,7 +142,6 @@
 	<h2> Past Orders </h2>
 	<?php include("pastOrder.php"); ?>
 	
-<p>STILL DUMMY TABLE, MAKE QUERIES</p>
 <?php include("Footer.php");
  OCILogoff($dbHandle);
  ?>

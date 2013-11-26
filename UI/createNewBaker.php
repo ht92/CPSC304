@@ -48,7 +48,7 @@
   }
 
 if(isset($_POST['createUser']) && strlen($password) >= 8 && 
-  strlen($password) <= 16) 
+  strlen($password) <= 16 && $salary > 0 ) 
 {
    $validIdFound = true;
    $userID;
@@ -107,7 +107,7 @@ if(isset($_POST['createUser']) && strlen($password) >= 8 &&
 }
 else if(isset($_POST['createUser']))
 {
-   echo "<br>Invalid Password Length<br>";
+   echo "<br>Invalid Input<br>";
 }
 
 ?>

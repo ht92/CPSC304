@@ -18,7 +18,13 @@
   <?php include("headerLogo.php"); ?>
   
   <?php include "utility.php"; ?>
-  <?php echo "Welcome ".$username."."; ?>
+  <?php 
+       $nameQuery = "select fname, lname from users u where u.userID = '" . 
+                    $userID . "'";
+       $result = executeCommand($nameQuery);
+       $row = OCI_Fetch_Array($result, OCI_NUM);
+      echo "Welcome ". $row[0] . " " . $row[1]; 
+      oci_free_statement($result);?>
   
   <h2>In-progress Tasks</h2>
   <?php 
@@ -28,7 +34,8 @@
 	include("orderTables.php");
    ?>
    
-  <?php include("Footer.php"); ?>
+  <?php include("Footer.php"); 
+   OCILogoff($dbHandle); ?>
 </div>
 </body>
 
