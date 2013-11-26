@@ -13,14 +13,13 @@
 </head>
 
 <body>
-	<?php include("headerStaff.php") ?>
+	<?php include("headerStaff.php"); ?>
   <div id="main">
-  <?php include("headerLogo.php") ?>
-  <?php include("session.php") ?>
+  <?php include("headerLogo.php"); ?>
 
   <?php echo "Welcome ".$username."."; ?>
 
-  <?php include("Footer.php") ?>
+  <?php include("Footer.php"); ?>
 </div>
 </body>
 

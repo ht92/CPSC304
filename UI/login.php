@@ -1,7 +1,4 @@
 <!DOCTYPE html>
-<?php
-include 'session.php';
-?>
 <html>
 <head>
 <title>Bakerzin-login</title>
@@ -19,27 +16,17 @@ include 'session.php';
 
         <?php
         include "utility.php";
-        $_SESSION['loggedIn'] = False;
-        $_SESSION['isBaker'] = False;
-        $_SESSION['isInstructor'] = False;
-        $_SESSION['isEmployee'] = False;
-        $_SESSION['isMember'] = False;
        
         if($dbHandle && isset($_GET['username']) && 
            isset($_GET['password']))
         {
-           $username = $_GET['username'];
-           $password = $_GET['password'];
            $query = "select userID, fname, lname from Users where
-                     username = '" . $username . "' and password
-                     = '" . $password . "'";
+                     username = '" . $_GET['username'] . "' and password
+                     = '" . $_GET['password'] . "'";
            $result = executeCommand($query);
            if($row = OCI_Fetch_Array($result, OCI_NUM))
            {
               echo "<br>Login Successful<br>";
-              $_SESSION['username'] = $username;
-              $_SESSION['password'] = $password;
-              $_SESSION['loggedIn'] = True;
               $userID = $row[0];
               oci_free_statement($result);              
 
@@ -50,49 +37,51 @@ include 'session.php';
                
               if($row = OCI_Fetch_Array($result, OCI_NUM))
               {
-                 echo "Employee Logged in";
-                 $empID = $row[0]; 
-                 $_SESSION['isEmployee'] = True;
-                 $_SESSION['type'] = "staff";
-                 $_SESSION['isBaker'] = False;
-                 $_SESSION['isInstructor'] = False;
                  oci_free_statement($result);                 
- 
+                 
+                 $isBaker = "false";
+                 $isInstructor = "false";  
                  $bakerQuery = "select * from Employee e, Baker b
-                                where b.bakerID = " . $empID;
+                                where b.bakerID = " . $userID;
                  $result = executeCommand($bakerQuery);
                  if(OCI_Fetch_Array($result, OCI_NUM))
                  {
-                    echo "Is Baker";
-                    $_SESSION['isBaker'] = True;
+                    $isBaker = "true";
                  }
                  oci_free_statement($result);
                   
                  $instructorQuery = "select * from Instructor i
-                                     where i.instructorID = " . $empID;
+                                     where i.instructorID = " . $userID;
                  $result = executeCommand($instructorQuery);
                  if(OCI_Fetch_Array($result, OCI_NUM))
                  {
-                    $_SESSION['isInstructor'] = True;
+                    $isInstructor = "true";
                  }
                  oci_free_statement($result);
-                 header("Location: staff.php");
+                 
+                header("Location: https://www.ugrad.cs.ubc.ca/~v4c8/staff.php?isBaker=" . $isBaker . "&isInstructor=" . $isInstructor . "&userID=" . $userID);
               }
               else
-              {
-                  echo "Customer Logged In";
-                  $_SESSION['type'] = "customer";
-                  
+              {   
+                  $isMember = "false";
+                  $isStudent = "false";
                   $memberQuery = "select * from Member m where
                                   m.memberID = " . $userID;
                   $result = executeCommand($memberQuery);
                   if(OCI_Fetch_Array($result, OCI_NUM))
                   {
-                     echo "is Member";
-                     $_SESSION['isMember'] = True;
+                     $isMember = "true";
                   }
                   oci_free_statement($result);
-                  header("Location: customer.php");
+                  
+                  $studentQuery = "select * from Student
+                                   where studentID = '" . $userID ."'";
+                  $result = executeCommand($studentQuery);
+                  if(OCI_Fetch_Array($result, OCI_NUM))
+                  {
+                     $isStudent = "true";
+                  }
+                  header("Location: https://www.ugrad.cs.ubc.ca/~v4c8/customer.php?isMember=" . $isMember . "&userID=" . $userID . "&isStudent=" . $isStudent);
               }
            }
            else

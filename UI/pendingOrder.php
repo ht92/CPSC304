@@ -2,26 +2,48 @@
 <html>
 <body>
 
-<table border="1">
-  <tr>
-    <th>Order ID</th>
-    <th>Order Date</th>
-    <th>Made for Date</th>
-    <th>Shipping Method</th>
-  </tr>
-  <tr>
-    <td>38902</td>
-    <td>24/10/2013</td>
-    <td>24/10/2013</td>
-    <td>Pick Up </td>
-  </tr>
-  <tr>
-    <td>12345</td>
-    <td>24/10/2013</td>
-    <td>26/10/2013</td>
-    <td>Pick Up</td>
-  </tr>
-</table>
+<?php
 
+$query = "select distinct (orderID), orderDate, shippingType
+          from Orders o, ShippingDetails sd
+          where '" . $userID . "' = o.customerID and
+          o.trackingID = sd.trackingID and 
+          o.completed is null order by orderID asc";
+
+if(isset($_POST['remove']))
+{
+   $rowsToRemove = $_POST['isChecked'];
+   foreach($rowsToRemove as $row)
+   {
+      $shippingQuery = "select trackingID from orders where orderID = '"
+                        . $row . "'";
+      $result = executeCommand($shippingQuery);
+      
+      $trackingID = OCI_Fetch_Array($result, OCI_NUM);
+      oci_free_statement($result);
+     
+      
+      $removeCommand = "delete from orders where orderID = '" . $row . "'";
+      oci_free_statement(executeCommand($removeCommand));
+      $removeCommand = "delete from ShippingDetails where trackingID = '"
+                       . $trackingID[0] . "'";
+      oci_free_statement(executeCommand($removeCommand));
+   }
+   OCICommit($dbHandle);
+}
+
+if($dbHandle)
+{
+  $result = executeCommand($query);
+  $columns = array("Order Id", "Order Date", "Shipping Method");
+
+ echo "<form name='removeOrder' method='post' action='customer.php?" . 
+       $appendData . "'>";
+  printTable($result, $columns, true);
+  oci_free_statement($result);
+  echo "<input type='submit' name='remove' value='Remove Selected'>
+        </form>";
+} 
+?>   
 </body>
 </html>

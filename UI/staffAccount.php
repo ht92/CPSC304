@@ -14,8 +14,11 @@
 	<table border="0">
   		<tr>
     		<td>User name</td>
-    		<td><form action="staffAccount.php" method="post"><input type="text"
-                                                  name="userID"></td>
+                <?php
+    		echo "<td><form action='staffAccount.php" . $appendData . 
+                     "' method='post'><input type='text' name='userID'></td>
+                     ";
+                ?>
     		<td><input type="submit" value="search"></td></form>
   		</tr>
 	</table>

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<?php include "userInfo.php"; ?>
 <html>
 <head>
 <title>Bakerzin-Customer</title>
@@ -15,17 +16,41 @@ document.getElementById("id").disabled=false;
 </head>
 
 <body>
-<?php include("headerCustomer.php") ?>
+<?php include("headerCustomer.php"); ?>
 	<div id="main">
-	<h1>Make Order</h1> 
+	<h1>Account Information</h1> 
 	<p>Please fill the following</p>
 
-		<form action="account.php" name="account">
-			Name:<input type="text" id="name" size="35" value="VARIABLE FOR QUERY" disabled><br>
-			Address:<input type="text" id="address" size="35" value="VARIABLE FOR QUERY" disabled><br>
-			Phone Number:<input type="text" id="phone" size="35" value="VARIABLE FOR QUERY" disabled><br>
-			Customer ID:<input type="text" id="id" size="35" value="VARIABLE FOR QUERY" disabled><br>			
-			<input type="submit" id="submit" value="Submit">
+	<table border="1">
+           <?php
+            include "utility.php";
+            echo "<form name='info' method='post' action='account.php?"
+                  . $appendData . "'>";
+           
+            $dataQuery = "select * from Users where userID = '" . $userID . 
+                          "'";
+            
+            $result = executeCommand($dataQuery);
+            $row = OCI_Fetch_Array($result, OCI_BOTH);
+            if($row)
+            {
+            echo "<tr>Name:</tr><input type='text' id='name' name='FullName' size='35'
+                   disabled value='" . $row['FNAME'] . " " . $row['LNAME'] 
+                   . "'><br>
+                 
+                   <tr>Address:</tr><input type='text'
+                   name='address' id='address' size='35' disabled value='" . 
+                   $row['ADDRESS'] . "'><br>
+
+                   <tr>Phone Number:</tr>
+                   <input type='text' name='phone' size='35' id='phone'
+                   disabled value='" . $row['PHONENUMBER'] . "'><br>
+		   
+                   <tr>Customer ID:</tr><input type='text' name='id' id='id'
+                   size='35' disabled value='" . $userID . "'><br>";
+            }
+            ?>
+			<input type="submit" value="Submit">
 		</form>
 		<button onclick="disableElements()">Edit Information</button>
 	<?php include("Footer.php") ?>
