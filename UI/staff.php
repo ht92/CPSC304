@@ -16,9 +16,18 @@
 	<?php include("headerStaff.php"); ?>
   <div id="main">
   <?php include("headerLogo.php"); ?>
-
+  
+  <?php include "utility.php"; ?>
   <?php echo "Welcome ".$username."."; ?>
-
+  
+  <h2>In-progress Tasks</h2>
+  <?php 
+	$dashboard = true;
+	include("staff_task_table.php");
+	echo "<h2> Pending Order </h2>";
+	include("orderTables.php");
+   ?>
+   
   <?php include("Footer.php"); ?>
 </div>
 </body>
