@@ -82,8 +82,7 @@ CREATE TABLE BakerTasks
 	PRIMARY KEY (taskID),
 	FOREIGN KEY (bakerID) REFERENCES Baker(bakerID)
 		ON DELETE CASCADE,	
-	FOREIGN KEY (itemID) REFERENCES Item(itemID)
-		ON DELETE CASCADE,
+	FOREIGN KEY (itemID) REFERENCES Item(itemID),
 	CONSTRAINT assigned_completed_constraint
 		CHECK (dateCompleted >= dateAssigned));	
 
@@ -111,10 +110,8 @@ CREATE TABLE Orders
 	trackingID CHAR(8) NOT NULL,
 	completed CHAR(1),
 	PRIMARY KEY(orderID, itemID),	
-	FOREIGN KEY(customerID) REFERENCES Customer(customerID)
-		ON DELETE CASCADE,
-	FOREIGN KEY(itemID) REFERENCES Item(itemID)
-		ON DELETE CASCADE,
+	FOREIGN KEY(customerID) REFERENCES Customer(customerID),
+	FOREIGN KEY(itemID) REFERENCES Item(itemID),
 	FOREIGN KEY(trackingID) REFERENCES ShippingDetails(trackingID)
 		ON DELETE CASCADE,
 	CONSTRAINT minimum_order_quantity
