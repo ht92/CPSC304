@@ -14,11 +14,13 @@
   include "utility.php";
 
   $username = "";
+  $username2 = "";
   $password = "";
   $firstName = "";
   $lastName = "";
   $address = "";
   $phoneNumber = ""; 
+  $entity = "";
 
   if (isset($_POST['username'])){
     $username = $_POST['username'];
@@ -86,6 +88,43 @@ if(isset($_POST['createUser']) && strlen($password) >= 8 &&
       OCILogoff($dbHandle);
       header("Location: login.php?accountCreated=true");
    }
+   //if customer insert to Customer table
+   /**if(strcmp($_POST['entity'],"customer") == 0)
+   {
+      $newUser = "insert into Customer values('" . $userID . "')";
+      oci_free_statement(executeCommand($newUser));
+      OCICommit($dbHandle);
+      OCILogoff($dbHandle);
+      header("Location: login.php?accountCreated=true");
+	}*/
+	if(strcmp($_POST['entity'],"baker") == 0)
+    {
+	
+      $newUser = "insert into Baker values('" . $userID . "')";
+      oci_free_statement(executeCommand($newUser));
+      OCICommit($dbHandle);
+      OCILogoff($dbHandle);
+      header("Location: login.php?accountCreated=true");
+	}
+	else if(strcmp($_POST['entity'],"instructor") == 0)
+    {
+      $newUser = "insert into Instructor values('" . $userID . "')";
+      oci_free_statement(executeCommand($newUser));
+      OCICommit($dbHandle);
+      OCILogoff($dbHandle);
+      header("Location: login.php?accountCreated=true");
+	}
+	else if(strcmp($_POST['entity'],"bakerAndInstructor") == 0)
+    {
+      $newUser = "insert into Instructor values('" . $userID . "')";
+	  $newUser2 = "insert into Baker values('" . $userID . "')";
+      oci_free_statement(executeCommand($newUser));
+	  oci_free_statement(executeCommand($newUser2));
+      OCICommit($dbHandle);
+      OCILogoff($dbHandle);
+      header("Location: login.php?accountCreated=true");
+	}
+   
 }
 else if(isset($_POST['createUser']))
 {
@@ -120,6 +159,16 @@ else if(isset($_POST['createUser']))
         <td>Phone number: </td>
         <td><input type="text" name="phoneNumber" id="phoneNumber" value="" ></td>
       </tr>
+	  <tr>
+		<td>Entity: </td>
+		<td><select name="entity">
+			<option value="baker">Baker</option>
+			<option value="customer">Customer</option>
+			<option value="instructor">Instructor</option>
+			<option value="bakerAndInstructor">Baker and Instructor</option>
+			</select>
+			</td>
+	  </tr>
     </table>
 
         <input type="submit" name="createUser" value="Create User">
