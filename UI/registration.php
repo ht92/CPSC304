@@ -22,7 +22,7 @@
 	First Name: <input type="string" name="firstName"><br> <br>
 	Last Name: <input type="string" name="lastName"><br> <br>
 	Address: <input type="string" name="address"><br> <br> 
-	Phone Number:<input type="string" name="phoneNumber"><br> <br>
+	Phone Number:<input type="number" name="phoneNumber"><br> <br>
 	User Name: <input type="string" name="userName"><br> <br>
 	Password: <input type="password" name="password"><br>
 	<p> Password must be between 8-16 characters length </p><br>
