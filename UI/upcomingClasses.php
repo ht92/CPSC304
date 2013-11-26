@@ -7,16 +7,14 @@ $classQuery;
 if($isStudent)
 {
 $classQuery = "select bc.classID, className, fname, lname, startDate,
-               endDate from BakingClass bc, enrollsIn ei, Users u
-               where ei.studentID = '" . $userID . "' and
-               ei.classID <> bc.classID and u.userID = bc.instructorID";
+               endDate from BakingClass bc, Users u
+               where u.userID = bc.instructorID and bc.classID not in   
+			   (select classID
+			   from EnrollsIn ei
+			   where ei.studentID = '" . $userID . "')
+			   order by bc.classID asc";
 }
-else
-{
-$classQuery = "select classID, className, fname, lname, startDate, endDate
-               from BakingClass bc, Users u
-               where u.userID = bc.instructorID";
-}
+
 $result = executeCommand($classQuery);
 ?>
 
