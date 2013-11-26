@@ -24,21 +24,48 @@ document.getElementById("phone").disabled=false;
 	<table border="1">
            <?php
             include "utility.php";
-            echo "<form name='info' method='post' action='account.php?"
-                  . $appendData . "'>";
+            echo "<form name='info' method='post'>";
            
             
             if(isset($_POST['submitChanges']))
             {
               if(isset($_POST['fname']))
               {
-                 $userUpdate = "update Users set fname = '" 
-                 .$_POST['fname']. "', lname = '" . $_POST['lname'] . 
-                 "', address='" . $_POST['address'] . "', phoneNumber ='" 
-                 . $_POST['phone'] . "' where userID = '" . $userID . "'";
-                 executeCommand($userUpdate);
-                 OCICommit($dbHandle);
-                 header("Location: account.php?" . $appendData);
+                 if(strlen($_POST['fname']) > 20)
+                 {
+                    echo "<br>First name cannot exceed 20 characters<br>";
+                 }
+                 else if(strlen($_POST['lname']) > 20)
+                 {
+                    echo "<br>Last name cannot exceed 20 characters<br>";
+                 }
+                 else if(strlen($_POST['address']) > 40)
+                 {
+                    echo "<br>Address cannot exceed 40 characters<br>";
+                 }
+                 else if(strlen($_POST['phone']) > 12)
+                 {
+                    echo "<br>Phone number cannot exceed 20 characters<br>";
+                 }
+                 else
+                 {
+                   $userUpdate = "update Users set fname = '" 
+                   .$_POST['fname']. "', lname = '" . $_POST['lname'] . 
+                   "', address='" . $_POST['address'] . "', phoneNumber ='" 
+                   . $_POST['phone'] . "' where userID = '" . $userID . "'";
+                    executeCommand($userUpdate);
+                    if(!$status)
+                    {
+                       echo "<br>Unable to update information<br>
+                          One of the fields contained invalid input<br>";
+                    }
+                    else
+                    {
+                       OCICommit($dbHandle);
+                    }
+                    header("Location: account.php?" . $appendData);
+                 }
+                 
               }
             }
 
@@ -50,19 +77,19 @@ document.getElementById("phone").disabled=false;
             if($row)
             {
             echo "<tr>First Name:</tr><input type='text' id='fname' 
-                  name='fname' size='35' disabled value='" . 
+                  name='fname' size='20' disabled value='" . 
                   $row['FNAME'] . "'><br>
                    
                   <tr>Last Name</tr><input type='text' id='lname'
-                  name='lname' size='35' disabled value='" . $row['LNAME'] .
+                  name='lname' size='20' disabled value='" . $row['LNAME'] .
                   "'><br>  
                  
                    <tr>Address:</tr><input type='text'
-                   name='address' id='address' size='35' disabled value='" . 
+                   name='address' id='address' size='40' disabled value='" . 
                    $row['ADDRESS'] . "'><br>
 
                    <tr>Phone Number:</tr>
-                   <input type='text' name='phone' size='35' id='phone'
+                   <input type='text' name='phone' size='12' id='phone'
                    disabled value='" . $row['PHONENUMBER'] . "'><br>";
             }
             ?>
