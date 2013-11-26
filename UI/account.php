@@ -2,7 +2,7 @@
 <?php include "userInfo.php"; ?>
 <html>
 <head>
-<title>Bakerzin-Customer</title>
+<title>Bakerzin-staff</title>
 <link href="Site.css" rel="stylesheet">
 <script>
 function disableElements()
@@ -55,7 +55,7 @@ document.getElementById("id").disabled=false;
 		<button onclick="disableElements()">Edit Information</button>
 	<?php include("Footer.php") ?>
 	</div>
-
+	</table>
 
 </body>
 </html>
