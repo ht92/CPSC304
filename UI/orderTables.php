@@ -45,8 +45,14 @@
 				echo "<form name='Pending Orders' method='post'
                 action='order.php" . $appendData . "'>";
 				
-				
-                 printTable($result, $columns, True);
+		 if(!$dashboard)
+                 {		
+                    printTable($result, $columns, True);
+                 }
+                 else
+                 {
+                    printTable($result, $columns);
+                 }
 				 
 				 if (!$dashboard) {
 					echo "<input type='submit' value='Order Shipped'></form>";
