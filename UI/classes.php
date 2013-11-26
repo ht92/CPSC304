@@ -8,18 +8,34 @@
 </head>
 <body>
 
+
 	<?php include("headerCustomer.php"); ?>
 	<div id="main">
 	 <?php include("headerLogo.php") ?>
 
-	 <h2> Currently Registerd</h2>
-	<?php include("currentClasses.php"); ?>
+	<?php 
+		$isStudent = $_GET['isStudent'];
+		
+		if ($isStudent == "true") {
+			echo "<h2> Currently Registered </h2>";
+			include("currentClasses.php");
+			
+			echo "<br>";
+			echo "<h2> Past Classes </h2>";
+			include("pastClasses.php");
+			
+			echo "<br>";
+			echo "<h2> Upcoming Classes </h2>";
+			include ("upcomingClasses.php");
+			
+		} else {
+			echo "<h2> You are not a student </h2>";
+			include ("beAStudent.php");
+		}
+	?>
+	
+	
 
-	<h2> Past Classes </h2>
-	<?php include("pastClasses.php"); ?>
-	 
-	<h2> Upcoming Classes </h2>
-	<?php include "upcomingClasses.php"; ?>
 <?php include("Footer.php"); ?>
 </div>
 
